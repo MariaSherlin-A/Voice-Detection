@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+librosa
+numpy
+openai-whisper
+soundfile
+ffmpeg-python
+torch
