@@ -9,7 +9,13 @@ from fastapi.security.api_key import APIKeyHeader
 from pydantic import BaseModel
 
 app = FastAPI()
-model = whisper.load_model("base")
+model = None
+
+def get_whisper_model():
+    global model
+    if model is None:
+        model = whisper.load_model("tiny")
+    return model
 
 # ---------------- API KEY ----------------
 API_KEY = "mysecretkey123"
@@ -48,6 +54,7 @@ def detect_voice(request: AudioRequest, api_key: str = Depends(verify_api_key)):
             f.write(audio_bytes)
 
         # -------- LANGUAGE DETECTION --------
+        model = get_whisper_model()
         result = model.transcribe("temp.mp3", task="detect-language")
         lang_code = result["language"]
 
